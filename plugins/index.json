@@ -1,0 +1,15 @@
+{
+  "format": 1,
+  "name": "Equicord ports",
+  "plugins": [
+    {
+      "name": "clearurls",
+      "title": "ClearURLs",
+      "description": "Automatically removes tracking elements from URLs you send",
+      "version": "1.0.0",
+      "author": "Vendicated, thororen (port: pops)",
+      "url": "https://raw.githubusercontent.com/LostMorality/Cindercord/main/plugins/clearurls.js",
+      "crc32": 1716967451
+    }
+  ]
+}
