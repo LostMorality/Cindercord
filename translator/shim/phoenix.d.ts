@@ -1,0 +1,1194 @@
+// From phoenix-unlock (https://github.com/mantikafasi/phoenix-unlock) by mantikafasi, MIT License.
+// Kept unchanged as the type reference for the runtime the translator targets.
+
+// Types for the `phoenix` object every plugin bundle receives.
+
+declare namespace Phoenix {
+  /// Partial user structure, resources/user. `public_flags` is User Flags.
+  interface User {
+    id: string;
+    username: string;
+    discriminator: string;
+    global_name?: string | null;
+    avatar: string | null;
+    avatar_decoration_data?: AvatarDecorationData | null;
+    collectibles?: Collectibles | null;
+    display_name_styles?: DisplayNameStyle | null;
+    primary_guild?: PrimaryGuild | null;
+    bot?: boolean;
+    system?: boolean;
+    banner?: string | null;
+    accent_color?: number | null;
+    public_flags?: number;
+  }
+
+  /// `expires_at` is a Unix timestamp, not ISO.
+  interface AvatarDecorationData {
+    asset: string;
+    sku_id: string;
+    expires_at: number | null;
+  }
+
+  interface Collectibles {
+    nameplate: NameplateData | null;
+  }
+
+  interface NameplateData {
+    asset: string;
+    sku_id: string;
+    label: string;
+    palette: string;
+    expires_at: number | null;
+  }
+
+  /// `font_id` is Display Name Font, `effect_id` is Display Name Effect.
+  interface DisplayNameStyle {
+    font_id: number;
+    effect_id: number;
+    colors: number[];
+  }
+
+  interface PrimaryGuild {
+    identity_enabled: boolean | null;
+    identity_guild_id: string | null;
+    tag: string | null;
+    badge: string | null;
+  }
+
+  /// `flags` is Guild Member Flags.
+  interface GuildMember {
+    user: User;
+    nick?: string | null;
+    avatar?: string | null;
+    avatar_decoration_data?: AvatarDecorationData | null;
+    collectibles?: Collectibles | null;
+    display_name_styles?: DisplayNameStyle | null;
+    banner?: string | null;
+    bio?: string | null;
+    roles: string[];
+    joined_at: string;
+    premium_since?: string | null;
+    deaf?: boolean;
+    mute?: boolean;
+    pending?: boolean;
+    communication_disabled_until?: string | null;
+    unusual_dm_activity_until?: string | null;
+    flags: number;
+    permissions?: string;
+  }
+
+  type PartialGuildMember = Omit<GuildMember, "user">;
+
+  interface MentionedUser extends User {
+    member?: PartialGuildMember;
+  }
+
+  /// `name` is null for deleted custom emoji, though the docs type it as string.
+  interface Emoji {
+    id: string | null;
+    name: string | null;
+    roles?: string[];
+    user?: User;
+    require_colons?: boolean;
+    managed?: boolean;
+    animated?: boolean;
+    available?: boolean;
+    version?: string;
+  }
+
+  type PartialEmoji = Pick<Emoji, "id" | "name"> & Partial<Emoji>;
+
+  /// `color` is deprecated in favor of `colors`.
+  interface Role {
+    id: string;
+    name: string;
+    description: string | null;
+    color: number;
+    colors: RoleColors;
+    hoist: boolean;
+    icon?: string | null;
+    unicode_emoji?: string | null;
+    position: number;
+    permissions: string;
+    managed: boolean;
+    mentionable: boolean;
+    flags?: number;
+    tags?: RoleTags;
+    version?: string;
+  }
+
+  interface RoleColors {
+    primary_color: number;
+    secondary_color: number | null;
+    tertiary_color: number | null;
+  }
+
+  /// The `null` fields are flags, present when true and absent when false.
+  interface RoleTags {
+    bot_id?: string;
+    integration_id?: string;
+    premium_subscriber?: null;
+    subscription_listing_id?: string;
+    available_for_purchase?: null;
+    guild_connections?: null;
+  }
+
+  /// `type` is Sticker Types, `format_type` is Sticker Format Types.
+  interface Sticker {
+    id: string;
+    pack_id?: string;
+    name: string;
+    description: string | null;
+    tags: string;
+    type: number;
+    format_type: number;
+    available?: boolean;
+    guild_id?: string;
+    user?: User;
+    sort_value?: number;
+    version?: string;
+  }
+
+  interface StickerItem {
+    id: string;
+    name: string;
+    format_type: number;
+  }
+
+  interface SoundboardSound {
+    sound_id: string;
+    name: string;
+    volume: number;
+    emoji_id: string | null;
+    emoji_name: string | null;
+    guild_id?: string;
+    available: boolean;
+    user?: User;
+    user_id?: string;
+  }
+
+  /// `flags` is Attachment Flags.
+  interface Attachment {
+    id: string;
+    filename: string;
+    title?: string;
+    description?: string;
+    content_type?: string;
+    size: number;
+    url: string;
+    proxy_url: string;
+    height?: number | null;
+    width?: number | null;
+    content_scan_version?: number;
+    placeholder_version?: number;
+    placeholder?: string;
+    ephemeral?: boolean;
+    duration_secs?: number;
+    waveform?: string;
+    flags?: number;
+    is_clip?: boolean;
+    is_thumbnail?: boolean;
+    is_remix?: boolean;
+    is_spoiler?: boolean;
+    clip_created_at?: string;
+    clip_participants?: User[];
+    application?: PartialApplication | null;
+  }
+
+  /// Narrowed from the partial application structure on resources/application.
+  interface PartialApplication {
+    id: string;
+    name: string;
+    description: string;
+    icon: string | null;
+    cover_image?: string;
+    splash?: string;
+    type: number | null;
+    flags: number;
+    [key: string]: unknown;
+  }
+
+  /// `type` is Embed Type, `flags` is Embed Flags.
+  interface Embed {
+    title?: string;
+    type?: string;
+    description?: string;
+    url?: string;
+    timestamp?: string;
+    color?: number;
+    footer?: EmbedFooter;
+    image?: EmbedMedia;
+    thumbnail?: EmbedMedia;
+    video?: EmbedMedia;
+    provider?: EmbedProvider;
+    author?: EmbedAuthor;
+    fields?: EmbedField[];
+    reference_id?: string;
+    content_scan_version?: number;
+    flags?: number;
+  }
+
+  /// `flags` is Attachment Flags.
+  interface EmbedMedia {
+    url: string;
+    proxy_url?: string;
+    height?: number;
+    width?: number;
+    flags?: number;
+    description?: string;
+    content_type?: string;
+    content_scan_metadata?: ContentScanMetadata;
+    placeholder_version?: number;
+    placeholder?: string;
+  }
+
+  interface EmbedProvider {
+    name?: string;
+    url?: string;
+  }
+
+  interface EmbedAuthor {
+    name: string;
+    url?: string;
+    icon_url?: string;
+    proxy_icon_url?: string;
+  }
+
+  interface EmbedFooter {
+    text: string;
+    icon_url?: string;
+    proxy_icon_url?: string;
+  }
+
+  interface EmbedField {
+    name: string;
+    value: string;
+    inline?: boolean;
+  }
+
+  /// `flags` is Content Scan Flags.
+  interface ContentScanMetadata {
+    flags: number;
+    version: number;
+  }
+
+  interface Reaction {
+    count: number;
+    count_details: ReactionCountDetails;
+    me: boolean;
+    me_burst: boolean;
+    emoji: PartialEmoji;
+    burst_colors: string[];
+  }
+
+  interface ReactionCountDetails {
+    normal: number;
+    burst: number;
+  }
+
+  /// `type` is Activity Action Type on resources/presence.
+  interface MessageActivity {
+    type: number;
+    party_id?: string;
+    name_override?: string;
+    icon_override?: string;
+  }
+
+  interface MessageCall {
+    participants: string[];
+    ended_timestamp: string | null;
+  }
+
+  /// `type` is Interaction Type, `command_type` is Application Command Type.
+  interface MessageInteractionMetadata {
+    id: string;
+    type: number;
+    name?: string;
+    command_type?: number;
+    ephemerality_reason?: number;
+    user: User;
+    authorizing_integration_owners: Record<string, string>;
+    original_response_message_id?: string;
+    interacted_message_id?: string;
+    triggering_interaction_metadata?: MessageInteractionMetadata;
+    target_user?: User;
+    target_message_id?: string;
+  }
+
+  interface MessageInteraction {
+    id: string;
+    type: number;
+    name: string;
+    user: User;
+  }
+
+  interface MessageRoleSubscription {
+    role_subscription_listing_id: string;
+    tier_name: string;
+    total_months_subscribed: number;
+    is_renewal: boolean;
+  }
+
+  /// `type` is Message Purchase Notification Type.
+  interface MessagePurchaseNotification {
+    type: number;
+    guild_product_purchase: GuildProductPurchase | null;
+  }
+
+  interface GuildProductPurchase {
+    listing_id: string;
+    product_name: string;
+  }
+
+  interface MessageGiftInfo {
+    emoji?: PartialEmoji;
+    sound?: { id: string };
+  }
+
+  /// `type` is Message Reference Type, 0 for replies and 1 for forwards.
+  interface MessageReference {
+    type?: number;
+    message_id?: string;
+    channel_id: string;
+    guild_id?: string;
+  }
+
+  interface MessageSnapshot {
+    message: SnapshotMessage;
+  }
+
+  interface SnapshotMessage {
+    content: string;
+    timestamp: string;
+    edited_timestamp: string | null;
+    mentions: User[];
+    mention_roles: string[];
+    attachments: Attachment[];
+    embeds: Embed[];
+    type: number;
+    flags: number;
+    components?: Component[];
+    resolved?: ResolvedData;
+    sticker_items?: StickerItem[];
+    soundboard_sounds?: SoundboardSound[];
+  }
+
+  /// `layout_type` is Poll Layout Type.
+  interface Poll {
+    question: PollMedia;
+    answers: PollAnswer[];
+    expiry: string | null;
+    allow_multiselect: boolean;
+    layout_type: number;
+    results?: PollResults;
+  }
+
+  interface PollMedia {
+    text?: string;
+    emoji?: PartialEmoji;
+  }
+
+  interface PollAnswer {
+    answer_id: number;
+    poll_media: PollMedia;
+  }
+
+  interface PollResults {
+    is_finalized: boolean;
+    answer_counts: PollAnswerCount[];
+  }
+
+  interface PollAnswerCount {
+    id: number;
+    count: number;
+    me_voted: boolean;
+  }
+
+  /// `type` is Potion Type.
+  interface Potion {
+    used_by: string;
+    type: number;
+    emoji: PartialEmoji[];
+    created_at: string;
+  }
+
+  /// `base_theme` is Theme on resources/user-settings-proto.
+  interface SharedClientTheme {
+    colors: string[];
+    gradient_angle: number;
+    base_mix: number;
+    base_theme?: number | null;
+  }
+
+  /// `type` is Application Type on resources/application.
+  interface IntegrationApplication {
+    id: string;
+    name: string;
+    description: string;
+    icon: string | null;
+    cover_image?: string;
+    splash?: string;
+    type: number | null;
+    primary_sku_id?: string;
+    bot?: User;
+    deeplink_uri?: string | null;
+    third_party_skus?: ApplicationSku[];
+    role_connections_verification_url?: string | null;
+    connection_entrypoint_url?: string;
+    is_verified: boolean;
+    is_discoverable: boolean;
+    is_monetized: boolean;
+    parent_id?: string;
+  }
+
+  /// Application SKU object, resources/game.
+  interface ApplicationSku {
+    id: string | null;
+    sku: string | null;
+    distributor: string;
+  }
+
+  /// `type` is Channel Type, `flags` is Channel Flags.
+  interface Channel {
+    id: string;
+    type: number;
+    guild_id?: string;
+    position?: number;
+    permission_overwrites?: PermissionOverwrite[];
+    name?: string | null;
+    topic?: string | null;
+    nsfw?: boolean;
+    last_message_id?: string | null;
+    last_pin_timestamp?: string | null;
+    bitrate?: number;
+    user_limit?: number;
+    rate_limit_per_user?: number;
+    recipients?: User[];
+    recipient_flags?: number;
+    icon?: string | null;
+    nicks?: ChannelNick[];
+    managed?: boolean;
+    blocked_user_warning_dismissed?: boolean;
+    safety_warnings?: SafetyWarning[];
+    application_id?: string;
+    owner_id?: string;
+    owner?: GuildMember | null;
+    parent_id?: string | null;
+    rtc_region?: string | null;
+    video_quality_mode?: number;
+    total_message_sent?: number;
+    message_count?: number;
+    member_count?: number;
+    member_ids_preview?: string[];
+    thread_metadata?: ThreadMetadata;
+    member?: ThreadMember;
+    default_auto_archive_duration?: number | null;
+    default_thread_rate_limit_per_user?: number;
+    permissions?: string;
+    flags?: number;
+    available_tags?: ForumTag[];
+    applied_tags?: string[];
+    default_reaction_emoji?: DefaultReaction | null;
+    default_forum_layout?: number;
+    default_sort_order?: number | null;
+    default_tag_setting?: string;
+    icon_emoji?: IconEmoji | null;
+    theme_color?: number | null;
+    is_message_request?: boolean;
+    is_message_request_timestamp?: string | null;
+    is_spam?: boolean;
+    status?: string | null;
+    hd_streaming_until?: string | null;
+    hd_streaming_buyer_id?: string | null;
+    linked_lobby?: LinkedLobby | null;
+    is_linkable?: boolean;
+    is_viewable_and_writeable_by_all_members?: boolean;
+    template?: string;
+    version?: string;
+  }
+
+  interface PartialChannel {
+    id: string;
+    type: number;
+    name: string | null;
+    recipients?: User[];
+    icon?: string | null;
+    guild_id?: string | null;
+  }
+
+  /// `type` is Permission Overwrite Type, 0 for role and 1 for member.
+  interface PermissionOverwrite {
+    id: string;
+    type: number;
+    allow: string;
+    deny: string;
+  }
+
+  interface ChannelNick {
+    id: string;
+    nick: string;
+  }
+
+  /// `type` is Safety Warning Type.
+  interface SafetyWarning {
+    id: string;
+    type: number;
+    expiry: string;
+    dismiss_timestamp: string | null;
+  }
+
+  interface ThreadMetadata {
+    archived: boolean;
+    auto_archive_duration: number;
+    archive_timestamp: string;
+    locked: boolean;
+    invitable?: boolean;
+    create_timestamp?: string | null;
+  }
+
+  /// `flags` is Thread Member Flags.
+  interface ThreadMember {
+    id?: string;
+    user_id?: string;
+    join_timestamp: string;
+    flags: number;
+    muted?: boolean;
+    mute_config?: MuteConfig | null;
+    member?: GuildMember;
+  }
+
+  interface MuteConfig {
+    end_time?: string | null;
+    selected_time_window?: number;
+  }
+
+  interface ForumTag {
+    id: string;
+    name: string;
+    moderated: boolean;
+    emoji_id: string | null;
+    emoji_name: string | null;
+  }
+
+  interface DefaultReaction {
+    emoji_id: string | null;
+    emoji_name: string | null;
+  }
+
+  interface IconEmoji {
+    id: string | null;
+    name: string | null;
+  }
+
+  interface LinkedLobby {
+    application_id: string;
+    lobby_id: string;
+    linked_by: string;
+    linked_at: string;
+    require_application_authorization: boolean;
+  }
+
+  /// Resolved data object, interactions/receiving-and-responding. Maps are keyed by snowflake.
+  interface ResolvedData {
+    users?: Record<string, User>;
+    members?: Record<string, Omit<GuildMember, "user" | "deaf" | "mute">>;
+    roles?: Record<string, Role>;
+    channels?: Record<
+      string,
+      Omit<Channel, "permission_overwrites" | "recipients" | "icon" | "application_id" | "managed" | "member">
+    >;
+    messages?: Record<string, Message>;
+    attachments?: Record<string, Attachment>;
+  }
+
+  /// Message components from resources/components. Modal-only types are left out.
+  type Component =
+    | ActionRow
+    | Button
+    | StringSelect
+    | UserSelect
+    | RoleSelect
+    | MentionableSelect
+    | ChannelSelect
+    | Section
+    | TextDisplay
+    | Thumbnail
+    | MediaGallery
+    | FileComponent
+    | Separator
+    | ContentInventoryEntryComponent
+    | Container
+    | CheckpointCard;
+
+  interface ActionRow {
+    type: 1;
+    id?: number;
+    components: Component[];
+  }
+
+  /// `style` is Button Style. The docs mark `custom_id` required, but link and premium buttons omit it.
+  interface Button {
+    type: 2;
+    id?: number;
+    style: number;
+    label?: string;
+    emoji?: PartialEmoji;
+    custom_id?: string;
+    sku_id?: string;
+    url?: string;
+    disabled?: boolean;
+  }
+
+  interface SelectBase {
+    id?: number;
+    custom_id: string;
+    placeholder?: string;
+    min_values?: number;
+    max_values?: number;
+    required?: boolean;
+    disabled?: boolean;
+  }
+
+  interface StringSelect extends SelectBase {
+    type: 3;
+    options: SelectOption[];
+  }
+
+  interface SelectOption {
+    label: string;
+    value: string;
+    description?: string;
+    emoji?: PartialEmoji;
+    default?: boolean;
+  }
+
+  interface UserSelect extends SelectBase {
+    type: 5;
+    default_values?: SelectDefaultValue[];
+  }
+
+  interface RoleSelect extends SelectBase {
+    type: 6;
+    default_values?: SelectDefaultValue[];
+  }
+
+  interface MentionableSelect extends SelectBase {
+    type: 7;
+    default_values?: SelectDefaultValue[];
+  }
+
+  /// `channel_types` is Channel Type.
+  interface ChannelSelect extends SelectBase {
+    type: 8;
+    channel_types?: number[];
+    default_values?: SelectDefaultValue[];
+  }
+
+  interface SelectDefaultValue {
+    id: string;
+    type: string;
+  }
+
+  interface Section {
+    type: 9;
+    id?: number;
+    components: TextDisplay[];
+    accessory: Thumbnail | Button;
+  }
+
+  interface TextDisplay {
+    type: 10;
+    id?: number;
+    content: string;
+  }
+
+  interface Thumbnail {
+    type: 11;
+    id?: number;
+    media: UnfurledMediaItem;
+    description?: string | null;
+    spoiler?: boolean;
+  }
+
+  interface MediaGallery {
+    type: 12;
+    id?: number;
+    items: MediaGalleryItem[];
+  }
+
+  interface MediaGalleryItem {
+    media: UnfurledMediaItem;
+    description?: string | null;
+    spoiler?: boolean;
+  }
+
+  interface FileComponent {
+    type: 13;
+    id?: number;
+    file: UnfurledMediaItem;
+    spoiler?: boolean;
+    name: string;
+    size: number;
+  }
+
+  /// `spacing` is Separator Spacing Type.
+  interface Separator {
+    type: 14;
+    id?: number;
+    divider?: boolean;
+    spacing?: number;
+  }
+
+  /// The entry is left untyped, see Content Inventory Entry Object on resources/components.
+  interface ContentInventoryEntryComponent {
+    type: 16;
+    id?: number;
+    content_inventory_entry: Record<string, unknown>;
+  }
+
+  interface Container {
+    type: 17;
+    id?: number;
+    components: Component[];
+    accent_color?: number | null;
+    spoiler?: boolean;
+  }
+
+  /// The data is left untyped, see Checkpoint Data Structure on resources/components.
+  interface CheckpointCard {
+    type: 20;
+    id?: number;
+    checkpoint_data: Record<string, unknown>;
+  }
+
+  /// `flags` is Attachment Flags, `loading_state` is Unfurled Media Item Loading State.
+  interface UnfurledMediaItem {
+    id?: string;
+    url: string;
+    proxy_url?: string;
+    height?: number | null;
+    width?: number | null;
+    flags?: number;
+    content_type?: string;
+    content_scan_metadata?: ContentScanMetadata;
+    placeholder_version?: number;
+    placeholder?: string;
+    loading_state?: number;
+    attachment_id?: string;
+  }
+
+  /// Message object, resources/message. `type` is Message Type, `flags` is Message Flags.
+  interface Message {
+    id: string;
+    channel_id: string;
+    lobby_id?: string;
+    author: User;
+    content: string;
+    timestamp: string;
+    edited_timestamp: string | null;
+    tts: boolean;
+    mention_everyone: boolean;
+    mentions: User[];
+    mention_roles: string[];
+    mention_channels?: PartialChannel[];
+    attachments: Attachment[];
+    embeds: Embed[];
+    reactions?: Reaction[];
+    nonce?: number | string;
+    pinned: boolean;
+    webhook_id?: string;
+    type: number;
+    activity?: MessageActivity;
+    application?: IntegrationApplication;
+    application_id?: string;
+    flags: number;
+    message_reference?: MessageReference;
+    referenced_message?: Message | null;
+    message_snapshots?: MessageSnapshot[];
+    call?: MessageCall;
+    interaction?: MessageInteraction;
+    interaction_metadata?: MessageInteractionMetadata;
+    resolved?: ResolvedData;
+    thread?: Channel;
+    role_subscription_data?: MessageRoleSubscription;
+    purchase_notification?: MessagePurchaseNotification;
+    gift_info?: MessageGiftInfo;
+    components: Component[];
+    sticker_items?: StickerItem[];
+    stickers?: Sticker[];
+    poll?: Poll;
+    changelog_id?: string;
+    soundboard_sounds?: SoundboardSound[];
+    potions?: Potion[];
+    shared_client_theme?: SharedClientTheme;
+  }
+
+  /// Message object extra fields, gateway/gateway-events. `channel_type` is Channel Type.
+  interface GatewayMessage extends Message {
+    channel_type: number;
+    guild_id?: string;
+    member?: PartialGuildMember;
+    mentions: MentionedUser[];
+    metadata?: Record<string, string>;
+    moderation_metadata?: Record<string, string>;
+  }
+
+  interface MessageDelete {
+    id: string;
+    channel_id: string;
+    guild_id?: string;
+  }
+
+  interface MessageDeleteBulk {
+    ids: string[];
+    channel_id: string;
+    guild_id?: string;
+  }
+
+  const sig: unique symbol;
+
+  /// An opaque hook point handed out by the runtime. `P` is the payload its hooks receive.
+  interface Sig<P> {
+    readonly [sig]: P;
+  }
+
+  /// Payload types for gateway events, keyed like `phoenix.gateway`.
+  interface GatewayPayloads {
+    messageCreate: GatewayMessage;
+    /// A full message per the docs, with `tts` always false.
+    messageUpdate: GatewayMessage;
+    messageDelete: MessageDelete;
+    messageDeleteBulk: MessageDeleteBulk;
+  }
+
+  /// One handle per entry in the client's gateway registry, read from the
+  /// running binary. Events without a payload type here are `Sig<unknown>`, and
+  /// any event can be missing from a given build.
+  type Gateway = { readonly [E in keyof GatewayPayloads]: Sig<GatewayPayloads[E]> } & {
+    readonly [event: string]: Sig<unknown> | undefined;
+  };
+
+  interface Hooks<P> {
+    /// Runs before the client's handler. Return a payload to replace it, `false` to drop the
+    /// event, or nothing to pass the (possibly mutated) payload on. The replacement is
+    /// re-serialized with JSON.stringify, so integers above 2^53 lose precision.
+    before?(payload: P): P | false | void;
+    /// Runs after the client's handler with the payload it saw. `ok` is false when the handler
+    /// returned an error.
+    after?(payload: P, ok: boolean): void;
+  }
+
+  interface Log {
+    debug(...args: unknown[]): void;
+    info(...args: unknown[]): void;
+    warn(...args: unknown[]): void;
+    error(...args: unknown[]): void;
+  }
+
+  /// Per-plugin JSON storage, written to disk on every change.
+  interface Storage {
+    get<T = unknown>(key: string): T | undefined;
+    set(key: string, value: unknown): void;
+    delete(key: string): void;
+    keys(): string[];
+  }
+
+  interface SpecBase {
+    title: string;
+    description?: string;
+  }
+
+  type SettingSpec =
+    | (SpecBase & { type: "switch"; default?: boolean })
+    | (SpecBase & { type: "text"; default?: string })
+    /// Text shown masked, and replaced with `[redacted]` in the plugin's log lines.
+    | (SpecBase & { type: "secret"; default?: string })
+    /// One of a fixed list, shown as rows with a checkmark. Defaults to the first option.
+    | (SpecBase & {
+        type: "select";
+        options: readonly { value: string; label?: string }[];
+        default?: string;
+      })
+    | (SpecBase & { type: "number"; default?: number })
+    | (SpecBase & { type: "button"; onPress(): void });
+
+  /// The value a setting reads as. Buttons have none.
+  type SettingValue<S> = S extends { type: "switch" }
+    ? boolean
+    : S extends { type: "select"; options: readonly { value: infer V }[] }
+      ? V
+      : S extends { type: "text" | "secret" }
+      ? string
+      : S extends { type: "number" }
+        ? number
+        : never;
+
+  type SettingValues<S> = {
+    readonly [K in keyof S as S[K] extends { type: "button" } ? never : K]: SettingValue<S[K]>;
+  };
+
+  interface Settings {
+    /// Shows the settings on the plugin's page in Settings. Each property of the result reads
+    /// the user's current choice, so read it when needed instead of caching it. Text and number
+    /// fields save when the keyboard's go key is pressed.
+    define<const S extends Record<string, SettingSpec>>(schema: S): SettingValues<S>;
+  }
+
+  interface Api {
+    readonly gateway: Gateway;
+    /// Observes a hook point after the client handled it.
+    on<P>(sig: Sig<P>, listener: (payload: P) => void): void;
+    hook<P>(sig: Sig<P>, hooks: Hooks<P>): void;
+    /// Feeds `payload` to the client's own handler for `sig`, skipping every plugin. Works only
+    /// while a gateway hook runs, and throws elsewhere. Returns whether the handler accepted it.
+    dispatch<P>(sig: Sig<P>, payload: Partial<P>): boolean;
+    /// Like `dispatch`, for use outside a gateway hook. The payload reaches the client's handler
+    /// just before the next gateway event it handles, usually well under a second later.
+    enqueue<P>(sig: Sig<P>, payload: Partial<P>): void;
+    readonly messages: Messages;
+    readonly ui: Ui;
+    readonly commands: Commands;
+    readonly log: Log;
+    readonly storage: Storage;
+    readonly settings: Settings;
+    /// Read-only SQL over Phoenix's own cache (`files/store/<account>/cache.sqlite`), at most
+    /// 10000 rows. Arguments bind to `?` as text.
+    readonly stores: Stores;
+    /// Runs when the plugin is turned off, reloaded or removed. Hooks and settings go away on their
+    /// own, anything else the plugin started is its to undo here.
+    onUnload(cleanup: () => void): void;
+    fetch(url: string, init?: FetchInit): Promise<FetchResponse>;
+    /// Discord's API through the app's own HTTP client, with the app's session headers. Paths are
+    /// relative to the API base, like `/users/@me`. Rejects until the app has made a request of its
+    /// own.
+    readonly discord: Discord;
+  }
+
+  interface AuthorizeOptions {
+    clientId: string;
+    redirectUri: string;
+    /// `["identify"]` by default.
+    scopes?: string[];
+    /// `"code"` by default.
+    responseType?: string;
+  }
+
+  interface Discord {
+    /// Opens Discord's own authorize screen for an OAuth2 application. Once the user taps
+    /// Authorize, resolves to the redirect URL (`redirectUri?code=…`) for the plugin to fetch
+    /// itself; the app shows Discord's "authorized" page instead of opening the redirect, so no
+    /// browser is involved. Rejects when the user doesn't authorize within 10 minutes or another
+    /// `authorize` starts. The URL holds a credential, so don't log it.
+    authorize(options: AuthorizeOptions): Promise<string>;
+    request(path: string, init?: FetchInit): Promise<FetchResponse>;
+    get(path: string, init?: FetchInit): Promise<FetchResponse>;
+    delete(path: string, init?: FetchInit): Promise<FetchResponse>;
+    post(path: string, body?: string | object, init?: FetchInit): Promise<FetchResponse>;
+    put(path: string, body?: string | object, init?: FetchInit): Promise<FetchResponse>;
+    patch(path: string, body?: string | object, init?: FetchInit): Promise<FetchResponse>;
+  }
+
+  interface LocalOptions {
+    /// Shown as the sender, "Phoenix" by default.
+    author?: string;
+    guildId?: string;
+    embeds?: Embed[];
+  }
+
+  /// Messages shown only on this device. Nothing reaches Discord, and they land just before the
+  /// next gateway event Phoenix handles.
+  interface Messages {
+    /// Returns the new message's id.
+    addLocal(channelId: string, content: string, options?: LocalOptions): string;
+    updateLocal(message: Partial<Message> & { id: string; channel_id: string }): boolean;
+    deleteLocal(channelId: string, id: string): boolean;
+    /// Runs before a message from the message box is sent, after any slash command. Return a
+    /// string to send that instead, `false` to cancel, or nothing to leave it.
+    onSend(interceptor: (text: string, ctx: UiContext) => string | false | void): Remover;
+    /// Runs when a custom emoji is pressed in the emoji picker under the message box (not the
+    /// reaction picker), with its id. Return text to add to the end of the message box instead of
+    /// what Phoenix would do (insert it, or show a Nitro ad for a locked one), or nothing to leave
+    /// the press to Phoenix. While a handler exists, Phoenix counts emojis that need Nitro as
+    /// usable in the message box, so its picker and autocomplete show them without a lock.
+    /// Reactions and the rest keep the lock, and nothing else about Nitro changes.
+    onEmojiPick(handler: (emojiId: string, ctx: UiContext) => string | void): Remover;
+  }
+
+  /// `channelId` is the open channel, `reply` posts a local message there.
+  interface UiContext {
+    channelId: string | null;
+    reply(text: string): string;
+  }
+
+  interface MessageContext extends UiContext {
+    messageId: string;
+    /// The message as Phoenix cached it, when it did.
+    message?: Message;
+  }
+
+  interface ProfileContext extends UiContext {
+    /// Null for profiles with a default avatar.
+    userId?: string;
+  }
+
+  /// Text a `render` returns: plain, colored (32-bit ARGB), or nothing. Under a message's content,
+  /// `tint` also colors the message's author and text (32-bit ARGB); `text` may then be empty.
+  type Rendered =
+    | string
+    | { text?: string; color?: number; tint?: number }
+    | null
+    | undefined
+    | false;
+
+  /// Undoes a registration. `update` draws it again, asking the plugin anew; for a message
+  /// accessory, `update(messageId)` redraws only that message, and for a profile tab,
+  /// `update(userId)` only that profile's page.
+  interface Remover {
+    (): void;
+    update?(messageId?: string): void;
+  }
+
+  /// A pressable piece of text, or plain text without `onPress`. `color` (32-bit ARGB) wins over
+  /// `danger`.
+  interface ProfileAction {
+    label: string;
+    danger?: boolean;
+    color?: number;
+    onPress?(): void;
+  }
+
+  /// What a profile tab shows, top to bottom. Colors follow the profile's theme.
+  type ProfileBlock =
+    /// A paragraph, with an optional heading above it.
+    | { type: "text"; text: string; title?: string; color?: number }
+    /// A post by someone, laid out like a chat message: avatar (an image URL), then the name,
+    /// `badges` (image URLs) and a muted `subtitle` like a date, the text (custom emoji such as
+    /// `<:name:id>` show as images), `images` under it, and a row of actions. `onLongPress` runs
+    /// when the entry is held.
+    | {
+        type: "entry";
+        avatar?: string;
+        title: string;
+        subtitle?: string;
+        text: string;
+        badges?: string[];
+        images?: string[];
+        actions?: ProfileAction[];
+        /// A column at the entry's end, like ▲ score ▼ votes.
+        side?: ProfileAction[];
+        onLongPress?(): void;
+      }
+    /// A text box. `onSubmit` gets its text when the keyboard's send key is pressed, and the box
+    /// empties. What is typed survives the page being drawn again.
+    | {
+        type: "input";
+        placeholder?: string;
+        onSubmit(text: string): void;
+        /// A send button at the box's end, which submits like the send key.
+        sendButton?: boolean;
+      }
+    | { type: "button"; label: string; danger?: boolean; onPress(): void }
+    /// Buttons side by side.
+    | { type: "buttons"; buttons: ProfileAction[] };
+
+  /// A drawable in Phoenix's resources, like `res://ic_mana_puzzle_piece_plus`.
+  type Icon = string;
+
+  interface ButtonOptions {
+    icon: Icon;
+    label: string;
+    priority?: number;
+    onPress(ctx: UiContext): void;
+  }
+
+  /// Plugin UI next to Phoenix's own. Plugin callbacks run off the UI threads, so drawn results
+  /// land a moment after the screen they belong to. Everything goes away when the plugin is
+  /// turned off.
+  interface Ui {
+    /// In the chat header, left of search.
+    addHeaderButton(options: ButtonOptions): Remover;
+    /// In the message box, left of the emoji button.
+    addComposerButton(options: ButtonOptions): Remover;
+    /// A line under each message's content, or after its timestamp with `placement: "header"`.
+    /// It runs once per message and place, and the result is kept until `update`.
+    addMessageAccessory(options: {
+      placement?: "content" | "header";
+      priority?: number;
+      render(ctx: MessageContext): Rendered | Promise<Rendered>;
+    }): Remover;
+    /// A row in the message long-press menu, above Delete. The menu closes on press.
+    addMessageAction(options: {
+      label: string;
+      icon?: Icon;
+      danger?: boolean;
+      priority?: number;
+      visible?(ctx: MessageContext): boolean | Promise<boolean>;
+      onPress(ctx: MessageContext): void;
+    }): Remover;
+    /// A section at the end of a profile's main tab.
+    addProfileSection(options: {
+      title: string;
+      priority?: number;
+      render(ctx: ProfileContext): Rendered | Promise<Rendered>;
+    }): Remover;
+    /// A tab of its own on profiles, after Phoenix's tabs. `render` runs when the profile opens
+    /// (not when the tab is picked), and its page stays until `update`.
+    addProfileTab(options: {
+      title: string;
+      priority?: number;
+      render(ctx: ProfileContext): ProfileBlock[] | Promise<ProfileBlock[]>;
+    }): Remover;
+    /// Without `message`: a bottom sheet of `options` like Discord's message menu (a plain list
+    /// dialog until that menu has been opened once). An option's `icon` is a drawable, or the
+    /// accessibility id of a message menu row to borrow its icon, like `"message.actions.delete"`.
+    /// With `message`: a dialog with the text and up to three buttons (`options[0]` is the main
+    /// one). Resolves to the index picked, or -1 when it was dismissed.
+    choose(options: {
+      title?: string;
+      message?: string;
+      options?: (string | { label: string; icon?: Icon; danger?: boolean })[];
+    }): Promise<number>;
+    /// A short message at the bottom of the screen.
+    toast(text: string): void;
+  }
+
+  interface CommandInfo {
+    name: string;
+    description: string;
+    plugin: string;
+  }
+
+  /// Slash commands typed in the message box. Matching ones are listed first in Discord's `/`
+  /// suggestions, and picking one fills in `/name `.
+  interface Commands {
+    /// `execute` runs when `/name args` is sent. Return text to send that instead, or nothing
+    /// (or a promise) to send nothing.
+    register(options: {
+      name: string;
+      description?: string;
+      icon?: Icon;
+      execute(args: string, ctx: UiContext): string | { content: string } | void | Promise<unknown>;
+    }): Remover;
+    list(): CommandInfo[];
+  }
+
+  interface Stores {
+    sql<Row = Record<string, unknown>>(query: string, ...args: unknown[]): Promise<Row[]>;
+  }
+
+  interface FetchInit {
+    method?: string;
+    headers?: Record<string, string>;
+    /// Anything but a string is sent as JSON.
+    body?: string | object;
+  }
+
+  interface FetchResponse {
+    readonly status: number;
+    readonly ok: boolean;
+    text(): string;
+    json<T = unknown>(): T;
+  }
+}
+
+declare const phoenix: Phoenix.Api;
