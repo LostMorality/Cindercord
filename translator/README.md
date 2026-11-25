@@ -1,8 +1,8 @@
 # Cindercord translator: Equicord plugins on Discord Phoenix
 
 Runs Equicord-style TypeScript plugins on **Discord Phoenix** (the native Rust Android client)
-by translating Equicord's API onto phoenix-unlock's `phoenix` runtime object. Each plugin bundles
-to one self-contained IIFE the Phoenix runtime loads, same model as phoenix-unlock plugins.
+by translating Equicord's API onto the `phoenix` runtime object from Sunbird (aka phoenix-unlocker). Each plugin bundles
+to one self-contained IIFE the Phoenix runtime loads, same model as Sunbird plugins.
 
 ## Layout
 

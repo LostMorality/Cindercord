@@ -3,7 +3,7 @@
 Equicord-style plugins and themes for **Discord Phoenix**, the new Discord app Discord is quietly rebuilding in Rust.
 
 > [!CAUTION]
-> **Work in progress.** There's nothing to install yet. The pieces below are being built and tested on a real phone right now. Hit **Watch** if you want to know when that changes, and don't open an issue asking when it's done. It's done when it's done.
+> **Work in progress.** There's nothing to install yet. The pieces below are being built and tested on a real phone right now. Hit **Watch** if you want to know when that changes, and don't message me asking when it's done. It's done when it's done.
 
 **[What it is](#what-is-this)** · **[Status](#status)** · **[What carries over](#what-carries-over-from-equicord)** · **[Warnings](#before-you-get-excited)** · **[Credits](#credits)** · **[License](#license)**
 
@@ -19,7 +19,7 @@ Phoenix isn't a web page like the desktop app, so Equicord, Vencord and every CS
 - **Plugin drawer.** A "Browse plugins" page inside Discord's own settings. Tap **Install** and it's on. No rebuilding the app, no restarting.
 - **Theme converter.** Takes a desktop theme and repaints Phoenix with its colours.
 
-It's built on top of [phoenix-unlock](https://github.com/mantikafasi/phoenix-unlock), which does the hard part of opening Phoenix up and running plugins in it.
+It's built on top of [Sunbird](https://github.com/sunbird-tools/sunbird), aka phoenix-unlocker, which does the hard part of opening Phoenix up and running plugins in it.
 
 ## Status
 
@@ -50,11 +50,11 @@ Themes carry over **in part**:
 > Client mods break [Discord's Terms of Service](https://discord.com/terms), and Phoenix is an unreleased alpha on top of that. Things will break when Discord updates it. **Use an alt account.** If losing your main would ruin your week, this isn't for you yet.
 
 > [!IMPORTANT]
-> Cindercord isn't made by or affiliated with Discord, Equicord or phoenix-unlock. Don't bother them about it. Problems go in [this repo's issues](https://github.com/LostMorality/Cindercord/issues) once there's something to have problems with.
+> Cindercord isn't made by or affiliated with Discord, Equicord or Sunbird. Don't bother them about it. Problems and questions go to me on Discord, **nolifepops**, once there's something to have problems with. Skip the GitHub issues.
 
 ## Credits
 
-- [phoenix-unlock](https://github.com/mantikafasi/phoenix-unlock) (MIT): the loader and plugin runtime Cindercord builds on.
+- [Sunbird](https://github.com/sunbird-tools/sunbird), aka phoenix-unlocker (MIT): the loader and plugin runtime Cindercord builds on.
 - [Equicord](https://github.com/Equicord/Equicord) (GPL-3.0): the plugins being ported, and the API the translator copies.
 
 ## License
